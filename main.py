@@ -102,10 +102,10 @@ class Game(tk.Frame):
     def __check_button_game(self, butt):
         global x
         global image_of_step1, image_of_step2, image_of_step3, image_of_step4
-        image_of_step1 = tk.PhotoImage(file="Step1.png")
-        image_of_step2 = tk.PhotoImage(file="Step2.png")
-        image_of_step3 = tk.PhotoImage(file="Step3.png")
-        image_of_step4 = tk.PhotoImage(file="Step4.png")
+        image_of_step1 = tk.PhotoImage(file="assets/Step1.png")
+        image_of_step2 = tk.PhotoImage(file="assets/Step2.png")
+        image_of_step3 = tk.PhotoImage(file="assets/Step3.png")
+        image_of_step4 = tk.PhotoImage(file="assets/Step4.png")
         popw = word.lower()
         popw = list(popw)
         label_list = [lbl_letter1, lbl_letter2, lbl_letter3, lbl_letter4, lbl_letter5, lbl_letter6, lbl_letter7]
