@@ -14,50 +14,48 @@ class Game(tk.Frame):
              ["Водород", "Кремний", "Кальций", "Скандий", "Кобальт"]]
     cnt = 0
     session = 0
-    pix = "1000x500"
 
     def __init__(self, contain):
         super().__init__(contain)
-        self.startUI()
+        self.start_ui()
 
 
-    def startUI(self):
+    def start_ui(self):
         global start_UI
-        global notebook
-        global vybor
+        global notebook, choise
         notebook = ttk.Notebook()
         notebook.grid(row=0, column=0)
         start_UI = tk.Frame()
         start_UI.grid(row=1, column=1)
         notebook.add(start_UI, text="Настройка игры")
         self.font = font.Font(family="Forte", size=20)
-        lbl_glav = tk.Label(master=start_UI, text="Vicilitca", font=self.font)
-        lbl_glav.grid(row=1, column=3)
+        lbl_main = tk.Label(master=start_UI, text="Vicilitca", font=self.font)
+        lbl_main.grid(row=1, column=3)
         lbl1 = tk.Label(master=start_UI, text="Выберите категорию")
         lbl1.grid(row=2, column=2)
         lbl_pass = tk.Label(master=start_UI, text=" "*50)
         lbl_pass.grid(row=2, column=4)
-        vybor = tk.StringVar(value=Game.categories[0])
+        choise = tk.StringVar(value=Game.categories[0])
         get_categories = ttk.Combobox(master=start_UI,
                                       values=Game.categories,
                                       state="readonly",
-                                      textvariable=vybor)
+                                      textvariable=choise)
         get_categories.grid(row=2, column=3)
         get_categories.bind("<<ComboboxSelected>>", self.__cbx)
-        lbl_on_vybor = tk.Label(master=start_UI, textvariable=vybor)
-        lbl_on_vybor.grid(row=4, column=3)
+        lbl_for_choise = tk.Label(master=start_UI, textvariable=choise)
+        lbl_for_choise.grid(row=4, column=3)
         lbl_pass2 = tk.Label(master=start_UI, text=" "*64)
         lbl_pass2.grid(row=3, column=3)
-        lbl_inf = tk.Label(master=start_UI, text="Вы выбрали категорию: ")
-        lbl_inf.grid(row=4, column=2)
-        game_butt = tk.Button(master=start_UI, text="Начать игру", command=self.__gameUI)
+        lbl_info = tk.Label(master=start_UI, text="Вы выбрали категорию: ")
+        lbl_info.grid(row=4, column=2)
+        game_butt = tk.Button(master=start_UI, text="Начать игру", command=self.__game_ui)
         game_butt.grid(row=6, column=3)
 
     @staticmethod
     def __cbx(*args):
         start_UI.focus()
 
-    def __gameUI(self):
+    def __game_ui(self):
         global image_of_step0
         global game_UI, canva, word, cnt
         global lbl_letter1, lbl_letter2, lbl_letter3, lbl_letter4, lbl_letter5, lbl_letter6, lbl_letter7
@@ -94,67 +92,68 @@ class Game(tk.Frame):
         self.__button_alphabet()
         self.__word_letter()
 
+
     def __word_letter(self):
         label_list = [lbl_letter1, lbl_letter2, lbl_letter3, lbl_letter4, lbl_letter5, lbl_letter6, lbl_letter7]
         for i in range(len(word)):
             label_list[i]['text'] = "_"
 
     def __check_button_game(self, butt):
-        global x
         global image_of_step1, image_of_step2, image_of_step3, image_of_step4
-        image_of_step1 = tk.PhotoImage(file="assets/Step1.png")
-        image_of_step2 = tk.PhotoImage(file="assets/Step2.png")
-        image_of_step3 = tk.PhotoImage(file="assets/Step3.png")
-        image_of_step4 = tk.PhotoImage(file="assets/Step4.png")
-        popw = word.lower()
-        popw = list(popw)
+        image_of_step1 = tk.PhotoImage(file="Step1.png")
+        image_of_step2 = tk.PhotoImage(file="Step2.png")
+        image_of_step3 = tk.PhotoImage(file="Step3.png")
+        image_of_step4 = tk.PhotoImage(file="Step4.png")
+        guess_word = list(word.lower())
         label_list = [lbl_letter1, lbl_letter2, lbl_letter3, lbl_letter4, lbl_letter5, lbl_letter6, lbl_letter7]
-        if butt["text"] not in popw:
+        if butt["text"] not in guess_word:
             butt["state"] = "disabled"
             Game.cnt += 1
         else:
             for i in word.lower():
                 if i == butt["text"]:
-                    a = word.lower().index(i)
-                    zapoln = label_list[a]
-                    zapoln["text"] = butt['text']
+                    first_letter = word.lower().index(i)
+                    voide = label_list[first_letter]
+                    voide["text"] = butt['text']
                     butt['state'] = "disabled"
                     if word.lower().count(i) > 1:
-                        vv = a+1
-                        x = word.lower().index(i, vv)
-                        zapoln = label_list[x]
-                        zapoln["text"] = butt['text']
+                        cnt_alpha = first_letter+1
+                        second_letter = word.lower().index(i, cnt_alpha)
+                        voide = label_list[second_letter]
+                        voide["text"] = butt['text']
                     if word.lower().count(i) > 2:
-                        vv = a+1
-                        vv += 1
-                        c = word.lower().index(i, vv+1)
-                        zapoln = label_list[c]
-                        zapoln["text"] = butt['text']
-        av = Game.cnt
-        if av == 1:
+                        cnt_alpha = first_letter+1
+                        cnt_alpha += 1
+                        three_letter = word.lower().index(i, cnt_alpha+1)
+                        voide = label_list[three_letter]
+                        voide["text"] = butt['text']
+        attemt = Game.cnt
+        if attemt == 1:
             canva.create_image(0, 0, anchor="nw", image=image_of_step1)
-        elif av == 2:
+        elif attemt == 2:
             canva.create_image(0, 0, anchor="nw", image=image_of_step2)
-        elif av == 3:
+        elif attemt == 3:
             canva.create_image(0, 0, anchor="nw", image=image_of_step3)
-        elif av >= 4:
+        elif attemt >= 4:
             canva.create_image(0, 0, anchor="nw", image=image_of_step4)
             showerror(title="Висилица", message=f"Вы проиграли! Человек повешен! Загаданное слово: {word}")
             notebook.hide(1)
             notebook.select(0)
             Game.cnt = 0
-        zov = ("йёцукенгшщзхъфывапролджэячсмитьбю")
-        if lbl_letter7["text"] in zov:
-            if lbl_letter6["text"] in zov:
-                if lbl_letter5["text"] in zov:
-                    if lbl_letter4["text"] in zov:
-                        if lbl_letter3["text"] in zov:
-                            if lbl_letter2["text"] in zov:
-                                if lbl_letter1["text"] in zov:
+        alphabet = ("йёцукенгшщзхъфывапролджэячсмитьбю")
+        if lbl_letter7["text"] in alphabet:
+            if lbl_letter6["text"] in alphabet:
+                if lbl_letter5["text"] in alphabet:
+                    if lbl_letter4["text"] in alphabet:
+                        if lbl_letter3["text"] in alphabet:
+                            if lbl_letter2["text"] in alphabet:
+                                if lbl_letter1["text"] in alphabet:
                                     showinfo(title="Висилица", message="Вы выиграли! Поздравляю!")
                                     notebook.hide(1)
                                     notebook.select(0)
-                                    Game.cnt=0
+                                    Game.cnt = 0
+
+
     def __button_alphabet(self):
         letter_a = tk.Button(master=game_UI, text="а", command=lambda: self.__check_button_game(letter_a))
         letter_a.grid(row=3, column=0)
@@ -227,7 +226,7 @@ class Game(tk.Frame):
 
     @staticmethod
     def __random_word():
-        categorie = vybor.get()
+        categorie = choise.get()
         word = rd.choice(Game.words[Game.categories.index(categorie)])
         return word
 
@@ -240,7 +239,7 @@ class App(tk.Tk):
         self.columnconfigure([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], minsize=50)
         self.rowconfigure([0, 1, 2, 3, 4, 5], minsize=50)
         self.reg_widget()
-        self.geometry(Game.pix)
+        self.geometry("1000x500")
         self.resizable(False, False)
 
     def reg_widget(self):
